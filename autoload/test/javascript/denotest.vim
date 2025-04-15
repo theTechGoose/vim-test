@@ -1,5 +1,5 @@
 if !exists('g:test#javascript#denotest#file_pattern')
-  let g:test#javascript#denotest#file_pattern = '\v(.*)test\.(js|mjs|ts|jsx|tsx)$'
+  let g:test#javascript#denotest#file_pattern = '\v(.*|^test)(_test|\.test|\.spec)?\.(js|mjs|ts|jsx|tsx)$'
 endif
 
 function! test#javascript#denotest#test_file(file) abort
@@ -39,8 +39,10 @@ function! s:nearest_test(position) abort
   let patterns = {
     \ 'test': [
     \   '\v^\s*%(name:)\s*%("|'')(.*)%("|'')',
-    \   '\v^\s*%(%(Deno\.)?test)\s*[( ]\s*%("|'')(.*)%("|'')',
-    \   '\v^\s*%(%(Deno\.)?test)\s*[(][{]\s*%(name:)\s*%("|'')(.*)%("|'')'
+    \   '\v^\s*%(%(Deno\.)?test|describe|it)\s*[( ]\s*%("|''|`)(.*)%("|''|`)',
+    \   '\v^\s*%(%(Deno\.)?test|describe|it)\s*[(][{]\s*%(name:)\s*%("|''|`)(.*)%("|''|`)',
+    \   '\v^\s*describe\s*[( ]\s*%("|''|`)(.*)%("|''|`)',
+    \   '\v^\s*it\s*[( ]\s*%("|''|`)(.*)%("|''|`)',
     \ ] + g:test#javascript#patterns['test'],
     \ 'namespace': g:test#javascript#patterns['namespace'],
     \}
